@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import api from './api';
+import list_items from './data/items'
 
 class App extends Component {
   constructor(props) {
@@ -25,10 +26,22 @@ class App extends Component {
     this.setState({ items: response.data })
   }
 
-  render() {
+  populateItems(list_items) {
+    const items_br = list_items.map((item_name, count) => {
+      if (item_name.LocalizedNames) {
+        return item_name.LocalizedNames['PT-BR']
+      } else {
+        return item_name.UniqueName
+      }
+      
+  })
+    console.log(items_br)
+    return items_br
+  }
+  
+    render() {
 
     const { items } = this.state;
-    console.log(items)
 
     return (
       <div>
@@ -40,7 +53,17 @@ class App extends Component {
           <input type="submit" value="Pesquisar" />
         </form>
 
-        <h1>Listar os Filmes</h1>
+        <h1>Listar os Items</h1>
+
+        {this.populateItems(list_items)}
+        {/* {list_items.map((item_name, count) => (
+          {item_name.LocalizedNames && item_name.LocalizedNames['PT-BR'] ? (
+            <li key={count.toString()}>
+              {item_name.LocalizedNames['PT-BR']}
+            </li>
+            )}
+        ))} */}
+
         {items.map((item, i) => (
           <li key={i.toString()}>
              <p>
@@ -56,12 +79,20 @@ class App extends Component {
               {item.quality}
             </p>
             <p>
-              <strong>Preço mínimo: </strong>
-              {item.sell_price_min}
+              <strong>Pedido de compra: </strong>
+              {item.buy_price_max}
             </p>
             <p>
-              <strong>Data da atualização: </strong>
-              {item.sell_price_min_date}
+              <strong>Data do Pedido de compra: </strong>
+              {item.buy_price_max_date}
+            </p>
+            <p>
+              <strong>Pedido de venda: </strong>
+              {item.sell_price_max}
+            </p>
+            <p>
+              <strong>Data do Pedido de venda: </strong>
+              {item.sell_price_max_date}
             </p>
            
           </li>
